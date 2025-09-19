@@ -42,27 +42,6 @@ type Entry = {
   content: string;
 };
 
-const initialEntries: Entry[] = [
-  {
-    id: 1,
-    date: new Date(Date.now() - 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    prompt: "What is something beautiful you saw today?",
-    content: "I saw a stunning sunset with vibrant shades of orange and pink. It reminded me to appreciate the small moments of beauty in nature. The way the colors blended together was absolutely breathtaking, and it made me feel a sense of peace and wonder.",
-  },
-  {
-    id: 2,
-    date: new Date(Date.now() - 2 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    prompt: "Who is someone who has helped you recently?",
-    content: "My colleague helped me with a difficult project at work. I'm grateful for their support and teamwork, which made a huge difference. They stayed late to help me finish, and their positive attitude was infectious.",
-  },
-  {
-    id: 3,
-    date: new Date(Date.now() - 3 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    prompt: "What skill are you grateful to have?",
-    content: "I'm grateful for my ability to cook. It allows me to create nourishing meals for myself and my family, and it's a relaxing and creative outlet for me. There's something so satisfying about making a delicious meal from scratch.",
-  },
-];
-
 export default function HomePage() {
   const [dailyPrompt, setDailyPrompt] = useState('');
   const [entryText, setEntryText] = useState('');
@@ -71,7 +50,7 @@ export default function HomePage() {
   const [isSaved, setIsSaved] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
 
-  const [pastEntries, setPastEntries] = useState<Entry[]>(initialEntries);
+  const [pastEntries, setPastEntries] = useState<Entry[]>([]);
   const [entryToDelete, setEntryToDelete] = useState<Entry | null>(null);
   const [entryToEdit, setEntryToEdit] = useState<Entry | null>(null);
   const [editedContent, setEditedContent] = useState('');
@@ -173,56 +152,64 @@ export default function HomePage() {
             <h2 className="text-2xl font-headline mb-4">Your Timeline</h2>
             <ScrollArea className="h-[60vh] rounded-md">
               <div className="space-y-4 pr-4">
-                {pastEntries.map((entry, index) => (
-                  <Collapsible key={entry.id} defaultOpen={false} className="w-full">
-                    <Card className="shadow-md transition-shadow hover:shadow-lg">
-                      <CardHeader className="flex flex-row items-start justify-between p-4">
-                         <div className="flex items-center gap-4 flex-1">
-                          <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-sm text-center p-1 shrink-0">
-                            {entry.date}
+                {pastEntries.length > 0 ? (
+                  pastEntries.map((entry, index) => (
+                    <Collapsible key={entry.id} defaultOpen={false} className="w-full">
+                      <Card className="shadow-md transition-shadow hover:shadow-lg">
+                        <CardHeader className="flex flex-row items-start justify-between p-4">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-sm text-center p-1 shrink-0">
+                              {entry.date}
+                            </div>
+                            <div className="flex-1">
+                              <CardTitle className="text-lg font-semibold">{entry.prompt}</CardTitle>
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <CardTitle className="text-lg font-semibold">{entry.prompt}</CardTitle>
+                          <div className="flex items-center">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className="w-9 p-0">
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(entry)}>
+                                  <Edit3 className="mr-2 h-4 w-4" />
+                                  <span>Edit</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleDelete(entry)} className="text-destructive">
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  <span>Delete</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                            <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="w-9 p-0 shrink-0">
+                              <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
+                              <span className="sr-only">Toggle</span>
+                            </Button>
+                          </CollapsibleTrigger>
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="w-9 p-0">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleEdit(entry)}>
-                                <Edit3 className="mr-2 h-4 w-4" />
-                                <span>Edit</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleDelete(entry)} className="text-destructive">
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                <span>Delete</span>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                          <CollapsibleTrigger asChild>
-                           <Button variant="ghost" size="sm" className="w-9 p-0 shrink-0">
-                            <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
-                            <span className="sr-only">Toggle</span>
-                          </Button>
-                        </CollapsibleTrigger>
-                        </div>
-                      </CardHeader>
-                       <CollapsibleContent className="px-4 pb-4">
-                          <p className="text-foreground/90">{entry.content}</p>
-                        </CollapsibleContent>
-                        <div className="px-4 pb-4 data-[state=open]:hidden">
-                          <p className="text-foreground/80 line-clamp-2 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-4 after:bg-gradient-to-t after:from-card after:to-transparent">
-                              {entry.content}
-                          </p>
-                        </div>
-                    </Card>
-                     {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
-                  </Collapsible>
-                ))}
+                        </CardHeader>
+                        <CollapsibleContent className="px-4 pb-4 space-y-2">
+                           <Separator />
+                           <p className="text-foreground/90 pt-2">{entry.content}</p>
+                         </CollapsibleContent>
+                         <div className="px-4 pb-4 data-[state=open]:hidden">
+                           <p className="text-foreground/80 line-clamp-2 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-2 after:bg-gradient-to-t after:from-card after:to-transparent">
+                               {entry.content}
+                           </p>
+                         </div>
+                      </Card>
+                      {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
+                    </Collapsible>
+                  ))
+                ) : (
+                  <div className="text-center text-muted-foreground py-16">
+                    <p>Your timeline is empty.</p>
+                    <p className="text-sm">Start by writing your first gratitude entry!</p>
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </div>
