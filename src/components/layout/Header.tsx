@@ -1,8 +1,10 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Settings, User, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import {
   DropdownMenu,
@@ -19,6 +21,34 @@ import Logo from './Logo';
 
 export default function Header() {
   const pathname = usePathname();
+  const [username, setUsername] = useState('user');
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    // In a real app, you'd fetch this from your auth context or an API
+    const storedUsername = localStorage.getItem('username');
+    const storedAvatar = localStorage.getItem('avatar');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    if (storedAvatar) {
+      setAvatar(storedAvatar);
+    }
+    
+    const handleStorageChange = () => {
+      const newUsername = localStorage.getItem('username');
+      const newAvatar = localStorage.getItem('avatar');
+      if (newUsername) setUsername(newUsername);
+      if (newAvatar) setAvatar(newAvatar);
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+        window.removeEventListener('storage', handleStorageChange)
+    }
+  }, []);
+
 
   const navLinks = [
     { href: '/home', label: 'Home', icon: Home },
@@ -54,14 +84,14 @@ export default function Header() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                 <Avatar className="h-9 w-9">
-                  <AvatarFallback>U</AvatarFallback>
+                  {avatar ? <AvatarImage src={avatar} alt="User avatar" /> : <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>}
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">user</p>
+                  <p className="text-sm font-medium leading-none">{username}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

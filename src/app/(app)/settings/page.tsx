@@ -1,12 +1,57 @@
+
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+  const [username, setUsername] = useState("user");
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    const storedAvatar = localStorage.getItem('avatar');
+    if (storedAvatar) {
+      setAvatar(storedAvatar);
+    }
+  }, []);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setAvatar(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const handleSaveChanges = () => {
+    localStorage.setItem('username', username);
+    if(avatar) {
+      localStorage.setItem('avatar', avatar);
+    }
+    // Manually dispatch a storage event to trigger the header update
+    window.dispatchEvent(new Event('storage'));
+    
+    toast({
+      title: "Changes saved!",
+      description: "Your profile has been updated.",
+    });
+  }
+
   return (
     <div className="container mx-auto max-w-3xl p-4 md:p-8">
       <div className="space-y-8">
@@ -25,16 +70,16 @@ export default function SettingsPage() {
               <Label>Profile Picture</Label>
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarFallback>U</AvatarFallback>
+                  {avatar ? <AvatarImage src={avatar} alt="User avatar" /> : <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>}
                 </Avatar>
-                <Input id="picture" type="file" className="max-w-xs" />
+                <Input id="picture" type="file" accept="image/*" className="max-w-xs" onChange={handleFileChange} />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="name">Username</Label>
-              <Input id="name" defaultValue="user" />
+              <Input id="name" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
-            <Button>Save Changes</Button>
+            <Button onClick={handleSaveChanges}>Save Changes</Button>
           </CardContent>
         </Card>
 
