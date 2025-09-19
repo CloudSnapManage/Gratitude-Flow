@@ -1,6 +1,20 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { Inter as FontSans } from "next/font/google"
+import { cn } from '@/lib/utils';
+import { Literata as FontSerif } from 'next/font/google';
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+const fontSerif = FontSerif({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  axes: ['opsz']
+})
 
 export const metadata: Metadata = {
   title: 'GratitudeFlow',
@@ -14,12 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@24..144,400;24..144,700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased">
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        fontSans.variable,
+        fontSerif.variable
+      )}>
         {children}
         <Toaster />
       </body>

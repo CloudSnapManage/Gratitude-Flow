@@ -6,7 +6,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { prompts as predefinedPrompts, getDailyPrompt } from "@/lib/prompts";
-import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock } from "lucide-react";
+import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock, Feather } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -211,7 +211,7 @@ export default function HomePage() {
                   <span>{wordCount} words</span>
                   {lastSaved && <span className="ml-2">| Saved at {lastSaved}</span>}
                 </div>
-                <Button onClick={handleSave} disabled={isSaving || isSaved || entryText.trim().length === 0 || currentPrompt.trim().length === 0} className="w-full md:w-auto transition-all duration-300 transform active:scale-95">
+                <Button onClick={handleSave} disabled={isSaving || isSaved || entryText.trim().length === 0 || currentPrompt.trim().length === 0} className="w-full md:w-auto">
                   {isSaving ? 'Saving...' : isSaved ? <><CheckCircle className="mr-2" /> Saved!</> : 'Save Entry'}
                 </Button>
               </CardFooter>
@@ -273,8 +273,9 @@ export default function HomePage() {
                     </Collapsible>
                   ))
                 ) : (
-                  <div className="text-center text-muted-foreground py-16">
-                    <p>Your timeline is empty.</p>
+                  <div className="text-center text-muted-foreground py-16 flex flex-col items-center justify-center">
+                    <Feather className="w-12 h-12 text-primary/40 mb-4" />
+                    <p className="font-semibold text-lg">Your timeline is empty.</p>
                     <p className="text-sm">Start by writing your first gratitude entry!</p>
                   </div>
                 )}
@@ -333,4 +334,3 @@ export default function HomePage() {
       </Dialog>
     </>
   );
-}
