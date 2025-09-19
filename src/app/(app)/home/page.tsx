@@ -6,7 +6,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { prompts as predefinedPrompts, getDailyPrompt } from "@/lib/prompts";
-import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock, ChevronsUpDown } from "lucide-react";
+import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -67,11 +67,26 @@ export default function HomePage() {
   const [entryToEdit, setEntryToEdit] = useState<Entry | null>(null);
   const [editedContent, setEditedContent] = useState('');
 
+  // Load entries from local storage on initial render
   useEffect(() => {
+    try {
+      const storedEntries = localStorage.getItem('gratitude-entries');
+      if (storedEntries) {
+        setPastEntries(JSON.parse(storedEntries));
+      }
+    } catch (error) {
+      console.error("Failed to parse entries from localStorage", error);
+    }
     const dailyPrompt = getDailyPrompt();
     setCurrentPrompt(dailyPrompt);
   }, []);
 
+  // Save entries to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('gratitude-entries', JSON.stringify(pastEntries));
+  }, [pastEntries]);
+
+  // Update word count
   useEffect(() => {
     const words = entryText.trim().split(/\s+/).filter(Boolean);
     setWordCount(words.length);
@@ -208,7 +223,7 @@ export default function HomePage() {
             <ScrollArea className="h-[60vh] rounded-md">
               <div className="space-y-4 pr-4">
                 {pastEntries.length > 0 ? (
-                  pastEntries.map((entry, index) => (
+                  pastEntries.map((entry) => (
                     <Collapsible key={entry.id} defaultOpen={false} className="w-full">
                       <Card className="shadow-md transition-shadow hover:shadow-lg">
                         <CardHeader className="flex flex-row items-start justify-between p-4">
@@ -255,7 +270,6 @@ export default function HomePage() {
                            <p className="text-foreground/90 pt-2 whitespace-pre-wrap">{entry.content}</p>
                          </CollapsibleContent>
                       </Card>
-                      {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
                     </Collapsible>
                   ))
                 ) : (
