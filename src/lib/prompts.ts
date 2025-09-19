@@ -1,4 +1,4 @@
-const prompts = [
+export const prompts = [
   "What is a simple pleasure you are grateful for today?",
   "Who is someone who has helped you recently, and how did they make you feel?",
   "What is something beautiful you saw today?",

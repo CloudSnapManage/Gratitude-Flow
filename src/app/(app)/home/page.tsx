@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { getDailyPrompt } from "@/lib/prompts";
-import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock } from "lucide-react";
+import { prompts as predefinedPrompts, getDailyPrompt } from "@/lib/prompts";
+import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock, ChevronsUpDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -34,6 +34,14 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 type Entry = {
   id: number;
@@ -44,7 +52,10 @@ type Entry = {
 };
 
 export default function HomePage() {
-  const [dailyPrompt, setDailyPrompt] = useState('');
+  const [currentPrompt, setCurrentPrompt] = useState('');
+  const [isCustomPrompt, setIsCustomPrompt] = useState(false);
+  const [customPromptText, setCustomPromptText] = useState('');
+
   const [entryText, setEntryText] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
@@ -57,13 +68,31 @@ export default function HomePage() {
   const [editedContent, setEditedContent] = useState('');
 
   useEffect(() => {
-    setDailyPrompt(getDailyPrompt());
+    const dailyPrompt = getDailyPrompt();
+    setCurrentPrompt(dailyPrompt);
   }, []);
 
   useEffect(() => {
     const words = entryText.trim().split(/\s+/).filter(Boolean);
     setWordCount(words.length);
   }, [entryText]);
+  
+  const handlePromptChange = (value: string) => {
+    if (value === 'custom') {
+      setIsCustomPrompt(true);
+      setCustomPromptText('');
+      setCurrentPrompt('');
+    } else {
+      setIsCustomPrompt(false);
+      setCurrentPrompt(value);
+    }
+  };
+
+  const handleCustomPromptBlur = () => {
+      if (customPromptText.trim()) {
+          setCurrentPrompt(customPromptText.trim());
+      }
+  }
 
   const handleSave = () => {
     setIsSaving(true);
@@ -73,7 +102,7 @@ export default function HomePage() {
         id: Date.now(),
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        prompt: dailyPrompt,
+        prompt: currentPrompt,
         content: entryText,
     };
 
@@ -83,7 +112,10 @@ export default function HomePage() {
       setIsSaving(false);
       setIsSaved(true);
       setLastSaved(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
-      setEntryText(''); 
+      setEntryText('');
+      const dailyPrompt = getDailyPrompt();
+      setCurrentPrompt(dailyPrompt);
+      setIsCustomPrompt(false);
       setTimeout(() => setIsSaved(false), 2000);
     }, 1000);
   };
@@ -126,7 +158,30 @@ export default function HomePage() {
                   <Edit3 className="w-6 h-6 text-primary" />
                   Today's Gratitude
                 </CardTitle>
-                <CardDescription className="text-lg italic text-foreground/80 pt-2">&quot;{dailyPrompt}&quot;</CardDescription>
+                 <div className="pt-4 space-y-2">
+                    <Label htmlFor="prompt-select" className="text-sm font-medium text-muted-foreground">Your Prompt</Label>
+                    <Select onValueChange={handlePromptChange} value={isCustomPrompt ? 'custom' : currentPrompt}>
+                        <SelectTrigger id="prompt-select" className="text-base italic text-foreground/80 h-auto min-h-10 whitespace-normal text-left">
+                            <SelectValue placeholder="Select a prompt or write your own..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {predefinedPrompts.map((p, i) => (
+                                <SelectItem key={i} value={p}>{p}</SelectItem>
+                            ))}
+                            <SelectItem value="custom">Custom question...</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    {isCustomPrompt && (
+                        <Input 
+                            type="text" 
+                            placeholder="Write your own gratitude prompt..."
+                            value={customPromptText}
+                            onChange={(e) => setCustomPromptText(e.target.value)}
+                            onBlur={handleCustomPromptBlur}
+                            className="mt-2 text-base"
+                        />
+                    )}
+                </div>
               </CardHeader>
               <CardContent>
                 <Textarea
@@ -141,7 +196,7 @@ export default function HomePage() {
                   <span>{wordCount} words</span>
                   {lastSaved && <span className="ml-2">| Saved at {lastSaved}</span>}
                 </div>
-                <Button onClick={handleSave} disabled={isSaving || isSaved || entryText.trim().length === 0} className="w-full md:w-auto transition-all duration-300 transform active:scale-95">
+                <Button onClick={handleSave} disabled={isSaving || isSaved || entryText.trim().length === 0 || currentPrompt.trim().length === 0} className="w-full md:w-auto transition-all duration-300 transform active:scale-95">
                   {isSaving ? 'Saving...' : isSaved ? <><CheckCircle className="mr-2" /> Saved!</> : 'Save Entry'}
                 </Button>
               </CardFooter>
