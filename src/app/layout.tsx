@@ -1,9 +1,8 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { Inter as FontSans } from "next/font/google"
+import { Inter as FontSans, Literata as FontSerif } from "next/font/google";
 import { cn } from '@/lib/utils';
-import { Literata as FontSerif } from 'next/font/google';
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -13,7 +12,8 @@ const fontSans = FontSans({
 const fontSerif = FontSerif({
   subsets: ["latin"],
   variable: "--font-serif",
-})
+});
+
 
 export const metadata: Metadata = {
   title: 'GratitudeFlow',

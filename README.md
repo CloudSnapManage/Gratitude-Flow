@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # GratitudeFlow
 
 GratitudeFlow is a beautifully designed, modern web application that helps you cultivate a positive mindset by making daily gratitude journaling a simple and delightful habit. Reflect on your day, celebrate small wins, and build a timeline of your positive moments.
@@ -84,10 +83,3 @@ Your privacy is paramount. All journal entries are stored directly in your brows
 
 -   **Export:** You can back up your data at any time from the **Settings** page. This will generate a `gratitudeflow-backup.json` file.
 -   **Import:** You can restore your journal from a backup file on the same page. **Note:** Importing will overwrite any existing entries in your browser.
-=======
-# Firebase Studio
-
-This is a NextJS starter in Firebase Studio.
-
-To get started, take a look at src/app/page.tsx.
->>>>>>> 7cb168a (Initialized workspace with Firebase Studio)
