@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Lock, User } from 'lucide-react';
+import { Lock, User } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function SettingsPage() {
   return (
@@ -21,12 +22,17 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" defaultValue="Jane Doe" />
+              <Label>Profile Picture</Label>
+              <div className="flex items-center gap-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+                <Input id="picture" type="file" className="max-w-xs" />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" defaultValue="jane.doe@example.com" />
+              <Label htmlFor="name">Username</Label>
+              <Input id="name" defaultValue="user" />
             </div>
             <Button>Save Changes</Button>
           </CardContent>
@@ -58,7 +64,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
             <CardDescription>Manage how you receive notifications from us.</CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div>

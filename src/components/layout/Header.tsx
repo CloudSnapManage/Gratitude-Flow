@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Home, Settings, User, LogOut } from 'lucide-react';
 
@@ -15,13 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
 
 export default function Header() {
   const pathname = usePathname();
-  const userAvatar = PlaceHolderImages.find(img => img.id === 'user-avatar');
 
   const navLinks = [
     { href: '/home', label: 'Home', icon: Home },
@@ -57,26 +54,14 @@ export default function Header() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                 <Avatar className="h-9 w-9">
-                  {userAvatar && (
-                    <AvatarImage 
-                      src={userAvatar.imageUrl} 
-                      alt={userAvatar.description} 
-                      data-ai-hint={userAvatar.imageHint}
-                      width={40}
-                      height={40}
-                    />
-                  )}
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>U</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Jane Doe</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    jane.doe@example.com
-                  </p>
+                  <p className="text-sm font-medium leading-none">user</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
