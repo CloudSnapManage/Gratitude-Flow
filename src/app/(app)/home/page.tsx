@@ -6,7 +6,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { getDailyPrompt } from "@/lib/prompts";
-import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2 } from "lucide-react";
+import { CheckCircle, ChevronDown, Edit3, MoreVertical, Trash2, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -38,6 +38,7 @@ import { Label } from "@/components/ui/label";
 type Entry = {
   id: number;
   date: string;
+  time: string;
   prompt: string;
   content: string;
 };
@@ -68,22 +69,21 @@ export default function HomePage() {
     setIsSaving(true);
     setIsSaved(false);
     
-    // Create a new entry
     const newEntry: Entry = {
         id: Date.now(),
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         prompt: dailyPrompt,
         content: entryText,
     };
 
-    // Add new entry to the top of the list
     setPastEntries([newEntry, ...pastEntries]);
 
     setTimeout(() => {
       setIsSaving(false);
       setIsSaved(true);
       setLastSaved(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
-      setEntryText(''); // Clear textarea after saving
+      setEntryText(''); 
       setTimeout(() => setIsSaved(false), 2000);
     }, 1000);
   };
@@ -163,6 +163,10 @@ export default function HomePage() {
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-lg font-semibold">{entry.prompt}</CardTitle>
+                               <div className="flex items-center text-xs text-muted-foreground pt-1">
+                                <Clock className="w-3 h-3 mr-1" />
+                                <span>{entry.time}</span>
+                              </div>
                             </div>
                           </div>
                           <div className="flex items-center">
