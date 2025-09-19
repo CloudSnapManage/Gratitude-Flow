@@ -159,7 +159,7 @@ export default function HomePage() {
               </CardContent>
               <CardFooter className="flex flex-col md:flex-row items-center justify-between gap-4">
                  <div className="text-sm text-muted-foreground self-start md:self-center">
-                  <span>{wordContent} words</span>
+                  <span>{wordCount} words</span>
                   {lastSaved && <span className="ml-2">| Saved at {lastSaved}</span>}
                 </div>
                 <Button onClick={handleSave} disabled={isSaving || isSaved || entryText.trim().length === 0} className="w-full md:w-auto transition-all duration-300 transform active:scale-95">
