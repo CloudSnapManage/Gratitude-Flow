@@ -49,7 +49,7 @@ export default function SettingsPage() {
       title: "Changes saved!",
       description: "Your profile has been updated.",
     });
-  }
+  };
 
   return (
     <div className="container mx-auto max-w-3xl p-4 md:p-8">
