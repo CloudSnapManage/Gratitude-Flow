@@ -81,4 +81,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  .auth-bg {
+    @apply bg-gradient-to-br from-background to-primary/10;
+  }
+}
+
+@layer components {
+  .timeline-fade::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to top, hsl(var(--card)), transparent);
+    pointer-events: none;
+  }
 }

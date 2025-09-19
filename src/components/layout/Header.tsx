@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Settings, User, LogOut } from 'lucide-react';
+import { Home, Settings, User, LogOut, Feather } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 import {
@@ -25,7 +25,6 @@ export default function Header() {
   const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    // In a real app, you'd fetch this from your auth context or an API
     const storedUsername = localStorage.getItem('username');
     const storedAvatar = localStorage.getItem('avatar');
     if (storedUsername) {
@@ -36,10 +35,10 @@ export default function Header() {
     }
     
     const handleStorageChange = () => {
-      const newUsername = localStorage.getItem('username');
+      const newUsername = localStorage.getItem('username') || 'user';
       const newAvatar = localStorage.getItem('avatar');
-      if (newUsername) setUsername(newUsername);
-      if (newAvatar) setAvatar(newAvatar);
+      setUsername(newUsername);
+      setAvatar(newAvatar);
     }
 
     window.addEventListener('storage', handleStorageChange)
@@ -61,19 +60,23 @@ export default function Header() {
         <div className="mr-4 hidden md:flex">
           <Logo />
         </div>
+         <div className="md:hidden">
+            <Feather className="h-6 w-6 text-primary" />
+        </div>
 
-        <nav className="flex flex-1 items-center space-x-2 lg:space-x-4">
+        <nav className="flex flex-1 items-center space-x-1 lg:space-x-2">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} passHref>
               <Button
                 variant="ghost"
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
+                  'text-sm font-medium transition-colors hover:text-primary relative',
                   pathname === link.href ? 'text-primary' : 'text-muted-foreground'
                 )}
               >
                 <link.icon className="mr-2 h-4 w-4" />
                 {link.label}
+                 {pathname === link.href && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-primary rounded-full"></span>}
               </Button>
             </Link>
           ))}
@@ -83,8 +86,9 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                <Avatar className="h-9 w-9">
-                  {avatar ? <AvatarImage src={avatar} alt="User avatar" /> : <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>}
+                <Avatar className="h-9 w-9 ring-2 ring-primary/50">
+                   <AvatarImage src={avatar || undefined} alt="User avatar" />
+                  <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -92,6 +96,7 @@ export default function Header() {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{username}</p>
+                  <p className="text-xs leading-none text-muted-foreground">Reflecting daily ✨</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
