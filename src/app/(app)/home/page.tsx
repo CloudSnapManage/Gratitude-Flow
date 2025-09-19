@@ -193,13 +193,8 @@ export default function HomePage() {
                         </CardHeader>
                         <CollapsibleContent className="px-4 pb-4 space-y-2">
                            <Separator />
-                           <p className="text-foreground/90 pt-2">{entry.content}</p>
+                           <p className="text-foreground/90 pt-2 whitespace-pre-wrap">{entry.content}</p>
                          </CollapsibleContent>
-                         <div className="px-4 pb-4 data-[state=open]:hidden">
-                           <p className="text-foreground/80 line-clamp-2 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-2 after:bg-gradient-to-t after:from-card after:to-transparent">
-                               {entry.content}
-                           </p>
-                         </div>
                       </Card>
                       {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
                     </Collapsible>
