@@ -13,7 +13,6 @@ const fontSans = FontSans({
 const fontSerif = FontSerif({
   subsets: ["latin"],
   variable: "--font-serif",
-  axes: ['opsz']
 })
 
 export const metadata: Metadata = {
