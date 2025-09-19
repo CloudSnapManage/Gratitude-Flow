@@ -124,14 +124,21 @@ export default function HomePage() {
                         </Button>
                       </CollapsibleTrigger>
                     </CardHeader>
-                    <CollapsibleContent>
-                       <CardContent className="p-4 pt-0">
-                        <div className="relative max-h-24 overflow-hidden timeline-fade">
-                          <p className="text-foreground/80">{entry.content}</p>
+                     <CollapsibleContent className="px-4 pb-4">
+                        <div className="relative" data-state="closed">
+                          <div className="max-h-24 overflow-hidden timeline-fade group-data-[state=closed]:block hidden">
+                            <p className="text-foreground/80">{entry.content}</p>
+                          </div>
+                          <div className="group-data-[state=open]:block hidden">
+                             <p className="text-foreground/90">{entry.content}</p>
+                          </div>
                         </div>
-                         <p className="text-foreground/90 mt-2">{entry.content}</p>
-                      </CardContent>
-                    </CollapsibleContent>
+                         <div className="text-foreground/90 data-[state=open]:hidden">
+                            <p className="text-foreground/80 line-clamp-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-8 after:bg-gradient-to-t after:from-card after:to-transparent">
+                                {entry.content}
+                            </p>
+                        </div>
+                      </CollapsibleContent>
                   </Card>
                    {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
                 </Collapsible>
