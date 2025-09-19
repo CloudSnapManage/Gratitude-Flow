@@ -212,9 +212,7 @@ export default function HomePage() {
                         </div>
                       </CardHeader>
                        <CollapsibleContent className="px-4 pb-4">
-                           <div className="text-foreground/90">
-                              <p className="text-foreground/90">{entry.content}</p>
-                          </div>
+                          <p className="text-foreground/90">{entry.content}</p>
                         </CollapsibleContent>
                         <div className="px-4 pb-4 data-[state=open]:hidden">
                           <p className="text-foreground/80 line-clamp-2 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-4 after:bg-gradient-to-t after:from-card after:to-transparent">
