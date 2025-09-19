@@ -110,7 +110,7 @@ export default function HomePage() {
                   <Card className="shadow-md transition-shadow hover:shadow-lg">
                     <CardHeader className="flex flex-row items-start justify-between cursor-pointer p-4">
                        <div className="flex items-center gap-4">
-                        <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-sm">
+                        <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-sm text-center p-1">
                           {entry.date}
                         </div>
                         <div>
@@ -125,20 +125,15 @@ export default function HomePage() {
                       </CollapsibleTrigger>
                     </CardHeader>
                      <CollapsibleContent className="px-4 pb-4">
-                        <div className="relative" data-state="closed">
-                          <div className="max-h-24 overflow-hidden timeline-fade group-data-[state=closed]:block hidden">
-                            <p className="text-foreground/80">{entry.content}</p>
-                          </div>
-                          <div className="group-data-[state=open]:block hidden">
-                             <p className="text-foreground/90">{entry.content}</p>
-                          </div>
-                        </div>
-                         <div className="text-foreground/90 data-[state=open]:hidden">
-                            <p className="text-foreground/80 line-clamp-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-8 after:bg-gradient-to-t after:from-card after:to-transparent">
-                                {entry.content}
-                            </p>
+                         <div className="text-foreground/90">
+                            <p className="text-foreground/90">{entry.content}</p>
                         </div>
                       </CollapsibleContent>
+                      <div className="px-4 pb-4 data-[state=open]:hidden">
+                        <p className="text-foreground/80 line-clamp-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-4 after:bg-gradient-to-t after:from-card after:to-transparent">
+                            {entry.content}
+                        </p>
+                      </div>
                   </Card>
                    {index < pastEntries.length - 1 && <Separator className="my-4 md:hidden" />}
                 </Collapsible>
