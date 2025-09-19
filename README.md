@@ -73,7 +73,7 @@ The project follows the standard Next.js App Router structure with some logical 
     -   `src/components/ui`: UI components from ShadCN.
     -   `src/components/auth`: Authentication-related components.
     -   `src/components/layout`: Layout components like the header.
--   `src/lib/`: Utility functions, Firebase configuration, and constants.
+-   `src/lib/`: Utility functions, configuration, and constants.
 -   `src/hooks/`: Custom React hooks (e.g., `use-toast`).
 -   `src/ai/`: Configuration and flows for Genkit (for AI functionality).
 
